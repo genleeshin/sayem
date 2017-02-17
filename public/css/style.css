@@ -1,0 +1,49 @@
+body{
+	margin: 0;
+}
+h1,h2,h3,h4{
+	margin: 5px 0;
+}
+.error{
+	color: red;
+}
+
+ul{
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+
+.nav{
+	background: teal;
+}
+
+.nav > li{
+	display: inline-block;
+	margin-right: -4px;
+	padding: 0 15px;
+	height: 40px;
+	line-height: 40px;
+	color: white;
+}
+
+.nav a{
+	color: white;
+}
+
+.reply{
+	border-bottom: 1px dashed #ddd;
+	padding: 10px;
+}
+
+.disabled {
+  position: relative;
+  opacity: 0.3;
+}
+.disabled:after {
+    width: 100%;
+    height: 100%;
+    top: 40%;
+    position: absolute;
+    content: "You must be logged in to post a reply";
+}
