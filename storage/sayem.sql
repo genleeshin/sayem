@@ -27,14 +27,17 @@ CREATE TABLE `threads` (
   `parent_id` int(11) unsigned DEFAULT NULL,
   `user_id` int(11) unsigned NOT NULL,
   `title` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `body` text COLLATE utf8_unicode_ci NOT NULL,
+  `body` varchar(1000) COLLATE utf8_unicode_ci NOT NULL,
+  `replies` int(11) unsigned NOT NULL DEFAULT '0',
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   KEY `parent_id` (`parent_id`),
-  KEY `created_at` (`created_at`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+  KEY `created_at` (`created_at`),
+  KEY `replies` (`replies`),
+  KEY `body` (`body`(255))
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -43,7 +46,7 @@ CREATE TABLE `threads` (
 
 LOCK TABLES `threads` WRITE;
 /*!40000 ALTER TABLE `threads` DISABLE KEYS */;
-INSERT INTO `threads` VALUES (1,NULL,1,'How to unlock iPhone 5?','Does any one have any idea how or where can I unlock iPhone 5?','2017-02-16 18:26:56','2017-02-17 03:05:28'),(2,NULL,1,'The best android phone?','Which is the best android this year?','2017-02-16 20:52:18','2017-02-17 03:05:45'),(3,NULL,2,'Android or ios?','Which is more secure?','2017-02-16 20:52:18','2017-02-17 03:05:58'),(4,1,2,NULL,'I don\'t think it\'s possible','2017-02-17 03:12:39','0000-00-00 00:00:00'),(5,1,1,NULL,'Ok, Thanks for your reply, hopefully there would be one soon.','2017-02-17 03:12:39','2017-02-17 17:14:26'),(6,1,2,NULL,'I don\'t think it\'s possible','2017-02-17 03:58:10','0000-00-00 00:00:00'),(7,1,1,NULL,'Ok, Thanks for your reply','2017-02-17 03:58:10','0000-00-00 00:00:00'),(8,1,2,NULL,'I don\'t think it\'s possible','2017-02-17 03:58:17','0000-00-00 00:00:00'),(9,1,1,NULL,'Ok, Thanks for your reply','2017-02-17 03:58:17','0000-00-00 00:00:00'),(13,1,1,NULL,'anyone else','2017-02-17 15:07:31','0000-00-00 00:00:00'),(14,NULL,1,'Xioami note pro','is it any good\r\n\r\nhas anyone bought it, \r\n\r\nhow is the screen\r\n\r\nthanks','2017-02-17 17:55:12','0000-00-00 00:00:00');
+INSERT INTO `threads` VALUES (1,NULL,1,'How to unlock iPhone 5?','Does any one have any idea how or where can I unlock iPhone 5?',6,'2017-02-16 18:26:56','2017-02-18 02:59:36'),(2,NULL,1,'The best android phone?','Which is the best android this year?',6,'2017-02-16 20:52:18','2017-02-18 01:52:41'),(3,NULL,2,'Android or ios?','Which is more secure?',0,'2017-02-16 20:52:18','2017-02-17 03:05:58'),(4,1,2,NULL,'I don\'t think it\'s possible',0,'2017-02-17 03:12:39','0000-00-00 00:00:00'),(5,1,1,NULL,'Ok, Thanks for your reply, hopefully there would be one soon.',0,'2017-02-17 03:12:39','2017-02-17 17:14:26'),(6,1,2,NULL,'I don\'t think it\'s possible',0,'2017-02-17 03:58:10','0000-00-00 00:00:00'),(7,1,1,NULL,'Ok, Thanks for your reply',0,'2017-02-17 03:58:10','0000-00-00 00:00:00'),(9,1,1,NULL,'Ok, Thanks for your reply',0,'2017-02-17 03:58:17','0000-00-00 00:00:00'),(13,1,1,NULL,'anyone else',0,'2017-02-17 15:07:31','0000-00-00 00:00:00'),(15,2,2,NULL,'I guess it\'s google pixel',0,'2017-02-18 01:33:59','0000-00-00 00:00:00'),(16,2,2,NULL,'or \r\nsamsung\r\ngalaxy \r\ns7',0,'2017-02-18 01:34:54','0000-00-00 00:00:00'),(17,2,2,NULL,'also moto x',0,'2017-02-18 01:36:26','0000-00-00 00:00:00'),(18,2,2,NULL,'sdfsd',0,'2017-02-18 01:37:43','0000-00-00 00:00:00'),(19,2,2,NULL,'sdfsdsdf',0,'2017-02-18 01:41:07','0000-00-00 00:00:00'),(20,2,2,NULL,'ggc',0,'2017-02-18 01:52:41','0000-00-00 00:00:00');
 /*!40000 ALTER TABLE `threads` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -62,7 +65,8 @@ CREATE TABLE `users` (
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `email` (`email`)
+  UNIQUE KEY `email` (`email`),
+  KEY `name` (`name`)
 ) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -85,4 +89,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-02-17 18:16:54
+-- Dump completed on 2017-02-18 17:55:36
