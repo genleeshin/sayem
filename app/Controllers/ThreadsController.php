@@ -101,7 +101,7 @@ class ThreadsController extends Controller{
 
 	// create new thread
 
-	public function new()
+	public function add()
 	{
 	
 		// user must be logged in

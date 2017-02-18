@@ -14,7 +14,7 @@ return [
 
 	'thread/save' => 'ThreadsController@save',
 
-	'thread/new' => 'ThreadsController@new',
+	'thread/new' => 'ThreadsController@add',
 
 	'thread/create' => 'ThreadsController@create',
 
