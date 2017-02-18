@@ -18,6 +18,8 @@ return [
 
 	'thread/create' => 'ThreadsController@create',
 
+	'thread/remove' => 'ThreadsController@remove',
+
 	//authentication
 
 	'register' => 'AuthController@register',
@@ -25,4 +27,8 @@ return [
 	'login' => 'AuthController@login',
 
 	'logout' => 'AuthController@logout',
+
+	// Search
+
+	'search' => 'SearchController@index',
 ];

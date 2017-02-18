@@ -1,7 +1,15 @@
 <h1><?=$post->title?></h1>
+
 <h4>Posted <?=time_elapsed_string($post->created_at)?> by <?=$post->user->name?></h4>
+
 <p><?=$post->body?></p>
 
+<?php if(is_logged() && $post->user->id == user()->id): ?>
+	<p>
+		<a href="/thread/edit?id=<?=$post->id?>">Edit</a> | 
+		<a href="/thread/remove?id=<?=$post->id?>">Delete</a>
+	</p>
+<?php endif; ?>
 <hr>
 
 
@@ -16,8 +24,11 @@
 				
 				<p><?=$reply->body?></p>
 
-				<?php if($reply->user->id == user()->id): ?>
-					<p><a href="/thread/edit?id=<?=$reply->id?>">Edit</a></p>
+				<?php if(is_logged() && $reply->user->id == user()->id): ?>
+					<p>
+						<a href="/thread/edit?id=<?=$reply->id?>">Edit</a> | 
+						<a href="/thread/remove?id=<?=$reply->id?>">Delete</a>
+					</p>
 				<?php endif; ?>
 
 				<?php if((int)$reply->updated_at > 0): ?>
@@ -35,4 +46,4 @@
 
 <?=view('validation-error')?>
 
-<?=view('threads.reply-form')?>
+<?=view('threads.reply-form', compact('post'))?>

@@ -23,26 +23,34 @@ class ThreadsController extends Controller{
 
 	public function threads()
 	{
-		// list 10 threads per page
+		// list 20 threads per page
 
-		$threads = Thread::where('parent_id', null)->limit(10)->get();
+		// get sort type
 
-		return view('threads.index', compact('threads'));
+
+		$query = Thread::where('parent_id', null)->with('user')->limit(20);
+
+		$sort = get_string('sort', 'newest');
+
+		Thread::setOrder($query, $sort);
+
+		$threads = $query->get();
+
+		return view('threads.index', compact('threads', 'sort'));
 	
 	}
 
 	public function posts($id)
 	{
-
-		// $replies = \App\Database\Db::query("select t.*,u.* from threads t 
-		// 	left join users u on t.user_id=u.id where t.parent_id=:parent 
-		// 	order by t.created_at asc limit 0,3", ['parent' => $id]);
-
-		// $paging = Thread::where('parent_id', $id)->paginate(3);
+		// get main thread post with user information
 
 		$post = Thread::with('user')->find($id);
 
+		// get all thread replies with their user information
+
 		$replies = Thread::with('user')->where('parent_id', $id)->get();
+
+		// generate output
 
 		return view('threads.posts', compact('post', 'replies'));
 	
@@ -82,6 +90,10 @@ class ThreadsController extends Controller{
 				'user_id' => user()->id,
 				'body' => $body
 			]);
+
+		// recount replies
+
+		(new Thread)->updateTotalReplies($id);
 
 		redirect('/threads?id=' . $id . '#reply-id' . $reply->id);
 	
@@ -211,10 +223,56 @@ class ThreadsController extends Controller{
 	
 	}
 
-	// delete reply
+	// delete reply or thread
+
+	public function remove()
+	{
+	
+		// get post id from url
+
+		$id = get_int('id', false);
+
+		if(!$id) die('Invalid post id');
+
+		// user must be logged in to perform this action
+
+		if(!is_logged())
+			die('You are not authorized to perform this action');
+
+		// get post details
+
+		$post = Thread::find($id);
+
+		// check if user own this post
+
+		if(!$post || $post->user_id != user()->id )
+			die('You are not authorized to perform this action');
+
+		// remove the post and all it's replies
+
+		// if parent delete all it's replies first
+
+		if(is_null($post->parent_id))
+			Thread::where('parent_id', $id)->remove();
+
+		// remove post
+
+		Thread::where('id', $id)->remove();
 
 
-	// create a thread
 
-	// delete thread and all thread replies
+		// if it was a reply update thread's replies count
+
+		if($post->parent_id>0)
+			(new Thread)->updateTotalReplies($post->parent_id);
+
+		// if it was a thread return to thread list, else return to thread
+
+		if($post->parent_id>0)
+			return redirect('/threads?id=' . $post->parent_id);
+
+		return redirect();
+	
+	}
+
 }

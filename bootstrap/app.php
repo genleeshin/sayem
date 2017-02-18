@@ -24,6 +24,17 @@ $router = new App\Core\Router;
 
 $router->define(require __DIR__ . '/../routes.php');
 
+// check if it's a post method, if post then check if it contains session token 
+// for csrf protection
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if(!isset($_POST['token']) || $_POST['token']!=session('_token')){
+    	
+    	die('CSRF verification failed');
+    }
+}
+
+
 // parse url
 
 $uri = trim($_SERVER['REQUEST_URI'], '/');

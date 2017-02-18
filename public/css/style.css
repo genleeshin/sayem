@@ -15,7 +15,9 @@ ul{
 }
 
 .nav{
+	display: block;
 	background: teal;
+	margin-bottom: 15px;
 }
 
 .nav > li{

@@ -119,6 +119,11 @@ function view($file, $data = []){
     return $output;
 }
 
+function inc($file){
+    $file = str_replace('.', '/', $file);
+    include dir_view . $file  . '.php';
+}
+
 function get_int($key, $default=false){
     return filter_input(INPUT_GET, $key, FILTER_VALIDATE_INT, [
         "options" => [
@@ -194,7 +199,7 @@ function time_elapsed_string($datetime, $full = false) {
 }
 
 function csrf_token_field(){
-    return '<input type="hidden" name="token" value="' . session('token') . '">';
+    return '<input type="hidden" name="token" value="' . session('_token') . '">';
 }
 
 function forbidden(){

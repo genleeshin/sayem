@@ -1,15 +1,7 @@
-// op at the top
-
-// replies below
-
-// pagination
-
-// reply to thread
-	-- must be logged in
-	-- tinymce or similar for reply textbox
-
-// reply should be editable by owner
-
-// user profile picture
-
-// 
+** reply count
+** delete replies
+** sort thread by title / date posted / replies
+-- paginate
+** middleware for checking csrf
+-- search
+-- user profile picture

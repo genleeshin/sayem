@@ -94,14 +94,17 @@ class QueryBuilder{
 		return $this->page;
 	}
 
-	public function query($query, $data)
+	public function query($query, $data=[])
 	{
-	
+		//dd($query);
+
 		$sql = $this->db->prepare( $query );
 
 		$sql->execute($data);
 
-		return $sql->fetchAll(\PDO::FETCH_ASSOC);
+		$this->sql = $sql;
+
+		return $this;
 	
 	}
 
@@ -110,6 +113,8 @@ class QueryBuilder{
 	{
 	
 		$query = "select " . $this->getFields() . " from " . $this->table . ' '. $this->getCondition() . ' ' . $this->order_by . ' ' . $this->getLimit();
+
+		//var_dump($query);
 
 
 		try{
@@ -326,6 +331,13 @@ class QueryBuilder{
 	
 	}
 
+	public function remove()
+	{
+	
+		$this->query("delete from $this->table " . $this->getCondition(), $this->values);
+	
+	}
+
 	public function first()
 	{
 	
@@ -370,13 +382,50 @@ class QueryBuilder{
 	
 	}
 
+	public function whereLike($field, $keys)
+	{
+	
+		$ekeys = explode(' ', $keys);
+
+		$condition = '';
+
+		$total_words = count($ekeys);
+
+		if($total_words==1){
+
+			$condition = $field . ' like :' . $this->format_field($field);
+
+			$this->setCondition($condition);
+
+			$this->values[$this->format_field($field)] = '%' . $keys . '%';
+
+			return $this;
+
+		}
+
+		for($i=0; $i<count($ekeys); $i++):
+
+			$condition .= $field . ' like :' . $this->format_field($field).$i . '' . ($i<$total_words-1?' AND ':' ');
+
+			$this->values[$this->format_field($field).$i] = '%' . $ekeys[$i] . '%';
+
+		endfor;
+
+		$this->setCondition($condition);
+
+		return $this;
+	
+	}
+
 	public function orderBy($name, $order='asc')
 	{
 	
 		if(empty($this->order_by))
-			return $this->order_by = 'order by ' . $name . ' ' . $order;
+			$this->order_by = 'order by ' . $name . ' ' . $order;
+		else
+			$this->order_by .= ', ' . $name . ' ' . $order; 
 
-		$this->order_by .= ', ' . $name . ' ' . $order; 
+		return $this;
 	
 	}
 
@@ -394,6 +443,20 @@ class QueryBuilder{
 			return 'where ' . $this->condition;
 
 		return '';
+	
+	}
+
+	public function getValues()
+	{
+	
+		return $this->values;
+	
+	}
+
+	public function getOrder()
+	{
+	
+		return $this->order_by;
 	
 	}
 
@@ -427,6 +490,13 @@ class QueryBuilder{
 	{
 	
 		return ':'.implode(',:', array_keys($array));
+	
+	}
+
+	public function format_field($field)
+	{
+	
+		return str_replace('.', '_', $field);
 	
 	}
 

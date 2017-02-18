@@ -36,15 +36,20 @@ class Session{
 		if(session_start()){
 			session_regenerate_id(true);
 
-			$token = uniqid();
+			if(!isset($_SESSION['_token'])){
+				$token = uniqid();
 
-			$_SESSION['token'] = $token;
+				$_SESSION['_token'] = $token;
+			}
 
 			return true;
+
 		}else{
+
 			return false;
 		}
 	}
+
 
 	public static function removeTemp(){
 		unset($_SESSION['error']);
