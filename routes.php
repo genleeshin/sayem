@@ -31,4 +31,8 @@ return [
 	// Search
 
 	'search' => 'SearchController@index',
+
+	// Test
+
+	'test' => 'TestController@index',
 ];

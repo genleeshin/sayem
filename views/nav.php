@@ -2,9 +2,7 @@
 	<ul class="nav">
 		<li class="nav-logo">SmartPhone QA</li>
 		<li>
-			<form action="/search" method="post">
-
-				<?=csrf_token_field()?>
+			<form action="/search" method="get">
 
 				<input type="search" name="q" placeholder="Search..">
 

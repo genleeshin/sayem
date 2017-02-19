@@ -30,9 +30,9 @@ class QueryBuilder{
 
 	protected $items = [];
 
-	protected $relation = false;
+	protected $has_relation = false;
 
-	protected $relation_name = null;
+	protected $relations = [];
 
 
 	public function __construct()
@@ -183,12 +183,12 @@ class QueryBuilder{
 	
 	}
 
-	public function with($relation_name)
+	public function with($relation)
 	{
 	
-		$this->relation = true;
+		$this->has_relation = true;
 
-		$this->relation_name = $relation_name;
+		$this->relations[] = $relation;
 
 		return $this;
 	
@@ -197,13 +197,31 @@ class QueryBuilder{
 	public function getRelations($result)
 	{
 	
-		$relation_id = $this->relation_name . '_id';
+		foreach($this->relations as $relation)
+
+			$this->mapRelation($result, $relation);
+	
+	}
+
+	public function mapRelation($result, $relation)
+	{
+	
+		$class = 'App\\' . ucfirst($relation);
+
+		$relation_id = $relation . '_id';
+
+		if(is_object($result)):
+			$row = $class::where('id', $result->$relation_id)->row();
+
+			$result->{$relation} = $row;
+
+			return $result;
+
+		endif;
 
 		$ids = array_map(function($r) use ($relation_id){
 			return $r->$relation_id;
 		}, $result);
-
-		$class = 'App\\' . ucfirst($this->relation_name);
 
 		$rows = $class::whereIn('id', $ids)->get();
 
@@ -213,25 +231,7 @@ class QueryBuilder{
 			$rel[$row->id] = $row;
 
 		foreach($result as $r)
-			$r->{$this->relation_name} = $rel[$r->$relation_id];
-
-		return $result;
-	
-	}
-
-	public function getRelation($result)
-	{
-	
-		$relation_id = $this->relation_name . '_id';
-
-		$class = 'App\\' . ucfirst($this->relation_name);
-
-		$row = $class::where('id', $result->$relation_id)->row();
-
-		$result->{$this->relation_name} = $row;
-
-		return $result;
-	
+			$r->{$relation} = $rel[$r->$relation_id];	
 	}
 
 	public function get()
@@ -250,8 +250,8 @@ class QueryBuilder{
 
 		$result = $this->sql->fetch();
 
-		if($this->relation)
-			return $this->getRelation($result);
+		if($this->has_relation)
+			$this->getRelations($result);
 
 		return $result;
 	
@@ -264,8 +264,8 @@ class QueryBuilder{
 
 		$result = $this->sql->fetchAll();
 
-		if($this->relation)
-			return $this->getRelations($result);
+		if($this->has_relation)
+			$this->getRelations($result);
 
 		return $result;
 	

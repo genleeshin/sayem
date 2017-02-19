@@ -13,16 +13,16 @@ class SearchController extends Controller{
 	public function __construct()
 	{
 	
-		$this->sort = post_string('sort', 'newest');
+		$this->sort = get_string('sort', 'newest');
 	
 	}
 
 	public function index()
 	{
 	
-		$type = post_string('type', 'title');
+		$type = get_string('type', 'title');
 
-		$q = post_string('q', false);
+		$q = get_string('q', false);
 
 		$q = filter_var(trim($q), FILTER_SANITIZE_STRING,FILTER_SANITIZE_SPECIAL_CHARS);
 
