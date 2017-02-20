@@ -4,7 +4,7 @@
 
 		<h4 class="ls-info"><i class="fa fa-clock-o"></i>Posted <?=time_elapsed_string($post->created_at)?> by <b><?=$post->user->name?></b></h4>
 
-		<p class="excerpt"><?=$post->body?></p>
+		<p class="excerpt"><?=html_entity_decode($post->body)?></p>
 
 		<?php if(is_logged() && $post->user->id == user()->id): ?>
 			<p>

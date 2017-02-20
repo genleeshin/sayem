@@ -31,16 +31,23 @@
 			<?php foreach($threads as $thread): ?>
 				
 				<li class="list-thread">
+
 					<figure class="ls-image">
 						<img src="/images/generic-avatar.png" alt="" class="ls-avatar">				
 					</figure>
-					<h2><a href="/threads?id=<?=$thread->id?>"><?=$thread->title?></a></h2>
-					<span class="ls-info"><i class="fa fa-clock-o"></i><?=time_elapsed_string($thread->created_at)?> by <b><?=$thread->user->name?></b></span>
 
-					
+					<h2><a href="/threads?id=<?=$thread->id?>"><?=$thread->title?></a></h2>
+
+					<span class="ls-info">
+						<strong><i class="fa fa-tag"></i> <?=$thread->topic->name?></strong> &nbsp;
+						<i class="fa fa-clock-o"></i>
+						<?=time_elapsed_string($thread->created_at)?> 
+						by <b><?=$thread->user->name?></b>
+
+					</span>					
 
 					<p class="excerpt">
-						<?=$thread->excerpt()?>
+						<?=html_entity_decode($thread->excerpt())?>
 					</p>
 
 					<aside class="ls-replies"><?=$thread->replies . ' replies'?></aside>

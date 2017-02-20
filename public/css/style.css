@@ -142,13 +142,18 @@ Threads
 }
 
 .ls-action a{
-	color: #999;
+	color: dimgray;
 	margin-left: 15px;
 }
 
 .ls-info{
 	color: #666;
 	text-transform: uppercase;
+}
+.ls-info strong{
+	font-family: Ubuntu;
+	color: orange;
+	font-weight: 600;
 }
 
 .ls-info b{
@@ -172,10 +177,31 @@ FORM
 	.cform{
 		margin: 0 20%;
 	}
+
+	.lform{
+		margin: 0 30%;
+	}
 }
 
 .cform h1{
 	border-bottom: 1px solid #ddd;
 	padding-bottom: 15px;
 	margin-bottom: 15px;
+}
+
+.center-logo{
+	display: block;
+	width: 100%;
+	text-align: center;
+	margin: 0 auto;
+}
+
+.center-logo i{
+	margin: 15px auto;
+	color: cadetblue;
+}
+
+.center-head{
+	text-align: center;
+	margin-bottom: 20px;
 }

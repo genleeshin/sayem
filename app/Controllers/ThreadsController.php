@@ -30,7 +30,7 @@ class ThreadsController extends Controller{
 		// get sort type
 
 
-		$query = Thread::where('parent_id', null)->with('user')->limit(20);
+		$query = Thread::where('parent_id', null)->with('user')->with('topic')->limit(20);
 
 		$sort = get_string('sort', 'newest');
 
