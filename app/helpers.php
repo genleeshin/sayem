@@ -27,7 +27,7 @@ function redirect($url=null){
 }
 
 function sanitize_richtext($input){
-    $input = strip_tags($input, "<i>,<strong>,<p>,<b>");
+    $input = strip_tags($input, "<i>,<strong>,<p>,<b>,<img>");
 
     // encode all html and special chars
 

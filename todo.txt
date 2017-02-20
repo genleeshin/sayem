@@ -3,5 +3,11 @@
 ** sort thread by title / date posted / replies
 -- paginate
 ** middleware for checking csrf
--- search
+** search
 -- user profile picture
+-- tinymce
+-- breadcrumb
+-- bootstrap
+-- check search is working
+-- check crud
+-- check remove

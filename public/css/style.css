@@ -1,48 +1,77 @@
 body{
 	margin: 0;
+	font-family: Raleway, Helvetica;
+	font-size: 16px/24px;
+	font-weight: 300;
 }
+
 h1,h2,h3,h4{
+	font-family: Raleway;
+	font-weight: 400;
 	margin: 5px 0;
 }
+
+ul{
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+}
+
+a{
+	font-family: Raleway;
+	font-size: 18px/24px;
+	font-weight: 400;
+	text-decoration: none;
+}
+
 .error{
 	color: red;
 }
 
-ul{
-	list-style-type: none;
-	margin: 0;
-	padding: 0;
+.fa{
+	margin-right: 5px;
 }
 
-.nav{
-	display: block;
-	background: teal;
-	margin-bottom: 15px;
+/**
+=============================
+Navbar
+=============================
+*/
+@media(min-width: 968px){
+	.nav-search{
+		min-width: 300px;
+	}
 }
 
-.nav > li{
-	display: inline-block;
-	margin-right: -4px;
-	padding: 0 15px;
-	height: 40px;
-	line-height: 40px;
+.navbar-default{
+	background-color: darkcyan;
+}
+.navbar-brand{
+	font-family: "Ubuntu";
+	font-size: 24px;
+	font-weight: bold;
+}
+
+.navbar-default .navbar-brand{
 	color: white;
 }
 
-.nav a{
+.navbar-default .navbar-nav>li>a,
+.navbar-default .navbar-nav>li>a:hover{
 	color: white;
 }
+
 
 .reply{
 	border-bottom: 1px dashed #ddd;
 	padding: 10px;
 }
 
-.disabled {
+.rt-disabled {
   position: relative;
   opacity: 0.3;
 }
-.disabled:after {
+.rt-disabled:after {
     width: 100%;
     height: 100%;
     top: 40%;
@@ -50,15 +79,103 @@ ul{
     content: "You must be logged in to post a reply";
 }
 
-aside,section{
-	display: inline-block;
-	margin-right: -4px;
+/*
+====================================
+Threads
+======================================
+*/
+.h2-topic{
+	text-transform: uppercase;
+	color: #999;
+	border-bottom: 1px solid #ddd;
+	font-size: 18px;
+	padding-bottom: 10px;
+	font-weight: 400;
 }
 
-aside{
-	width: 20%;
+.list-topic-item{
+	display: block;
+	padding: 15px 5px;
+	border-bottom: 1px dashed #bbb;
+	font-size: 18px;
+	font-weight: 400;
 }
 
-section{
-	width: 80%;
+.list-thread{
+	position: relative;
+	display: block;
+	width: 100%;
+	padding: 10px 5px;
+	border-bottom: 1px dashed #aaa;
+	padding-left: 90px;
+}
+
+.excerpt{
+	margin: 15px 0;
+}
+
+.ls-image{
+	position: absolute;
+	left: 10px;
+	width: 50px;
+	top: 15%;
+}
+
+.ls-avatar{
+	width: 100%;
+}
+
+.ls-replies{
+	position: absolute;
+	right: 15px;
+	top: 20%;
+	font-size: 20px;
+	font-weight: 400;
+	color: darkcyan;
+}
+
+.ls-action{
+	display: block;
+	position: absolute;
+	right: 15px;
+	bottom: 4%;
+}
+
+.ls-action a{
+	color: #999;
+	margin-left: 15px;
+}
+
+.ls-info{
+	color: #666;
+	text-transform: uppercase;
+}
+
+.ls-info b{
+	font-family: Ubuntu;
+	color: darkcyan;
+	font-weight: 600;
+}
+
+.replier-name{
+	color: darkcyan;
+	font-family: Raleway;
+	font-weight: 400;
+}
+
+/*
+=====================
+FORM
+=======================
+*/
+@media(min-width: 968px){
+	.cform{
+		margin: 0 20%;
+	}
+}
+
+.cform h1{
+	border-bottom: 1px solid #ddd;
+	padding-bottom: 15px;
+	margin-bottom: 15px;
 }

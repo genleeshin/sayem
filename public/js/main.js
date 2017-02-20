@@ -6,6 +6,15 @@ document.addEventListener('DOMContentLoaded',function() {
     	document.querySelector('select[name="sort"]').onchange=sortThreads;
 	}
 
+	tinymce.init({ 
+		selector:'.richtext',
+		menubar:false,
+		plugins: [
+	    'link image preview anchor'
+	  ],
+		toolbar: 'undo redo | styleselect | bold italic | link image',
+	});
+
 },false);
 
 function sortThreads(e){
