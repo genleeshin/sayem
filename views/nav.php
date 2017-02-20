@@ -6,7 +6,7 @@
     <ul class="nav navbar-nav">
       <li><a href="/"><i class="fa fa-home"></i>Home</a></li>
     </ul>
-    <form class="navbar-form navbar-left" action="search">
+    <form class="navbar-form navbar-left" action="/search">
       <div class="form-group">
         <input type="text" name="q" class="form-control nav-search" placeholder="Search..">
       </div>

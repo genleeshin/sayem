@@ -45,8 +45,9 @@ class SearchController extends Controller{
 
 		Thread::setOrder($cond, $this->sort, 't');
 
-		return Db::query("select t.*,u.name as username from threads t 
-			inner join users u on t.user_id=u.id " . 
+		return Db::query("select t.*,u.name as username,tp.name as topic_name from threads t 
+			inner join users u on t.user_id=u.id 
+			left join topics as tp on t.topic_id=tp.id " . 
 			$cond->getCondition() . ' ' . 
 			$cond->getOrder(), 
 			$cond->getValues()
