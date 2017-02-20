@@ -39,15 +39,15 @@
 					<h2><a href="/threads?id=<?=$thread->id?>"><?=$thread->title?></a></h2>
 
 					<span class="ls-info">
-						<strong><i class="fa fa-tag"></i> <?=$thread->topic->name?></strong> &nbsp;
+						<strong><i class="fa fa-tag"></i> <a href="/threads?topic=<?=$thread->topic->id?>"><?=$thread->topic->name?></a></strong> &nbsp;
 						<i class="fa fa-clock-o"></i>
 						<?=time_elapsed_string($thread->created_at)?> 
-						by <b><?=$thread->user->name?></b>
+						by <b><a href="/user?id=<?=$thread->user->id?>"><?=$thread->user->name?></a></b>
 
 					</span>					
 
 					<p class="excerpt">
-						<?=html_entity_decode($thread->excerpt())?>
+						<?=excerpt($thread->body)?>
 					</p>
 
 					<aside class="ls-replies"><?=$thread->replies . ' replies'?></aside>

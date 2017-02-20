@@ -32,6 +32,10 @@ return [
 
 	'search' => 'SearchController@index',
 
+	// Users
+
+	'user' => 'UserController@index',
+
 	// Test
 
 	'test' => 'TestController@index',

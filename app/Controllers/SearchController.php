@@ -45,7 +45,7 @@ class SearchController extends Controller{
 
 		Thread::setOrder($cond, $this->sort, 't');
 
-		return Db::query("select t.*,u.name as username,tp.name as topic_name from threads t 
+		return Db::query("select t.*,u.name as username,u.id as user_id, tp.name as topic_name from threads t 
 			inner join users u on t.user_id=u.id 
 			left join topics as tp on t.topic_id=tp.id " . 
 			$cond->getCondition() . ' ' . 
@@ -62,9 +62,14 @@ class SearchController extends Controller{
 		Thread::setOrder($cond, $this->sort, 't1');
 
 		return Db::query(
-			"select t1.*,u.name as username, t2.title as parent_title from threads t1 
+			"select t1.*,u.name as username, u.id as user_id, IFNULL(t1.title, t2.title) as tt, 
+			tp1.name as topic_name, tp2.name as parent_topic_name from threads t1 
 
 			left join threads t2 on t1.parent_id=t2.id 
+
+			left join topics tp1 on t1.topic_id=tp1.id 
+
+			left join topics tp2 on t2.topic_id=tp2.id 
 
 			inner join users u on t1.user_id=u.id " . 
 
@@ -88,11 +93,16 @@ class SearchController extends Controller{
 		Thread::setOrder($cond, $this->sort, 't1');
 
 		return Db::query(
-			"select u.name as username,t1.*,t2.title as parent_title from users u 
+			"select u.name as username,u.id as user_id, t1.*,IFNULL(t1.title, t2.title) as tt, 
+			tp1.name as topic_name, tp2.name as parent_topic_name from users u 
 
 			inner join threads t1 on u.id=t1.user_id  
 
-			left join threads t2 on t1.parent_id=t2.id " . 
+			left join threads t2 on t1.parent_id=t2.id 
+
+			left join topics tp1 on t1.topic_id=tp1.id 
+			
+			left join topics tp2 on t2.topic_id=tp2.id " . 
 
 			$cond->getCondition() . ' ' . 
 

@@ -1,5 +1,5 @@
 <div class="container">
-	<h4>Search result for "<?=$q?>"</h4>
+	<h4>All posts from "<?=$user->name?>"</h4>
 	<div class="row">
 		<div class="col-sm-7"></div>
 		<div class="col-sm-1 text-right">		
@@ -24,13 +24,12 @@
 				<img src="/images/generic-avatar.png" alt="" class="ls-avatar">				
 			</figure>
 
-			<h2><a href="/threads?id=<?=$thread['id']?>"><?=isset($thread['tt'])?$thread['tt']:$thread['title']?></a></h2>
+			<h2><a href="/threads?id=<?=$thread['id']?>"><?=$thread['tt']?></a></h2>
 			
 			<span class="ls-info">
 				<strong><i class="fa fa-tag"></i> <a href="/threads?topic=<?=$thread['topic_id']?>"><?=isset($thread['topic_name'])?$thread['topic_name']:$thread['parent_topic_name']?></a></strong> &nbsp;
 
-				<?=time_elapsed_string($thread['created_at'])?> By 
-				<b><a href="/user?id=<?=$thread['user_id']?>"><?=$thread['username']?></a></b>
+				<?=time_elapsed_string($thread['created_at'])?> By <b><?=$thread['username']?></b> (<?=$thread['replies'] . ' replies'?>)
 			</span>
 
 			<p class="excerpt">

@@ -39,7 +39,7 @@
 
 		<div class="form-group">
 			<label for="body">Message</label>
-			<textarea name="body" id="body" class="richtext" cols="50" rows="10" required="required"><?=html_entity_decode(form_value('body', $post))?></textarea>
+			<textarea name="body" id="body" class="richtext" cols="50" rows="10"><?=html_entity_decode(form_value('body', $post))?></textarea>
 		</div>
 		<p><button type="submit" class="btn btn-block btn-primary">Submit</button></p>
 	</form>

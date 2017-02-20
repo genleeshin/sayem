@@ -26,6 +26,10 @@ function redirect($url=null){
     exit;
 }
 
+function excerpt($string, $length=120){
+    return substr(strip_tags(html_entity_decode($string)), 0, 100);
+}
+
 function sanitize_richtext($input){
     $input = strip_tags($input, "<i>,<strong>,<p>,<b>,<img>");
 

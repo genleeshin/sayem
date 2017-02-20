@@ -150,13 +150,15 @@ Threads
 	color: #666;
 	text-transform: uppercase;
 }
-.ls-info strong{
+.ls-info strong,
+.ls-info strong a{
 	font-family: Ubuntu;
 	color: orange;
 	font-weight: 600;
 }
 
-.ls-info b{
+.ls-info b,
+.ls-info b a{
 	font-family: Ubuntu;
 	color: darkcyan;
 	font-weight: 600;
