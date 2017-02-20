@@ -11,10 +11,26 @@
 
 	<?php endif; ?>
 
-	<?php if(!$post || is_null($post->parent_id)): ?>
+	<?php if($type=='add' || is_null($post->parent_id)): ?>
 		<div class="form-group">
 			<label for="title">Title</label>
-			<input type="text" name="title" value="<?=form_value('title', $post)?:''?>" placeholder="Enter your thread title">
+			<input type="text" name="title" value="<?=form_value('title', $post)?:''?>" placeholder="Enter your thread title" required>
+		</div>
+
+		<div class="form-group">
+
+			<label for="topic_id">Topic</label>
+
+			<select name="topic_id" id="topic_id" required="required">
+
+				<?php foreach($topics as $topic): ?>
+
+					<option value="<?=$topic->id?>" <?=form_value('topic_id', $post)==$topic->id?' selected':''?>><?=$topic->name?></option>
+
+				<?php endforeach; ?>
+
+			</select>
+
 		</div>
 
 	<?php endif; ?>

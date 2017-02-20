@@ -49,3 +49,16 @@ ul{
     position: absolute;
     content: "You must be logged in to post a reply";
 }
+
+aside,section{
+	display: inline-block;
+	margin-right: -4px;
+}
+
+aside{
+	width: 20%;
+}
+
+section{
+	width: 80%;
+}

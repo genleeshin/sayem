@@ -5,7 +5,7 @@ namespace App;
 use App\Database\Db;
 
 class Thread extends Model{
-	protected $fillable = ['parent_id', 'user_id', 'title', 'body', 'replies'];
+	protected $fillable = ['parent_id', 'user_id', 'title', 'body', 'replies', 'topic_id'];
 
 	public function excerpt()
 	{

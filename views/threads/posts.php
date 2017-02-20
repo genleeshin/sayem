@@ -10,6 +10,11 @@
 		<a href="/thread/remove?id=<?=$post->id?>">Delete</a>
 	</p>
 <?php endif; ?>
+
+<?php if((int)$post->updated_at > 0): ?>
+	<i>Last updated: <?=time_elapsed_string($post->updated_at)?></i>
+<?php endif; ?>
+
 <hr>
 
 

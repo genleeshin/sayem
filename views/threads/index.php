@@ -7,25 +7,39 @@ Sort by:
 </select>
 </p>
 
-<ul>
-<?php foreach($threads as $thread): ?>
-	
-	<li>
-		<h2><a href="/threads?id=<?=$thread->id?>"><?=$thread->title?></a></h2>
-		<?=time_elapsed_string($thread->created_at)?> By <b><?=$thread->user->name?></b> (<?=$thread->replies . ' replies'?>)
+<main>
+	<aside>
+		<ul>
+			<?php foreach($topics as $topic): ?>
+				
+				<li><a href="/threads?topic=<?=$topic->id?>"><?=$topic->name?></a></li>
 
-		<?php if(is_logged() && $thread->user_id == user()->id): ?>
+			<?php endforeach; ?>
+		</ul>
+	</aside>
+
+	<section>
+		<ul>
+		<?php foreach($threads as $thread): ?>
 			
-			<a href="/thread/edit?id=<?=$thread->id?>">Edit</a> | 
-			<a href="/thread/remove?id=<?=$thread->id?>">Delete</a>
+			<li>
+				<h2><a href="/threads?id=<?=$thread->id?>"><?=$thread->title?></a></h2>
+				<?=time_elapsed_string($thread->created_at)?> By <b><?=$thread->user->name?></b> (<?=$thread->replies . ' replies'?>)
 
-		<?php endif; ?>
+				<?php if(is_logged() && $thread->user_id == user()->id): ?>
+					
+					<a href="/thread/edit?id=<?=$thread->id?>">Edit</a> | 
+					<a href="/thread/remove?id=<?=$thread->id?>">Delete</a>
 
-		<p>
-			<?=$thread->excerpt()?>
-		</p>
+				<?php endif; ?>
 
-	</li>
+				<p>
+					<?=$thread->excerpt()?>
+				</p>
 
-<?php endforeach; ?>
-</ul>
+			</li>
+
+		<?php endforeach; ?>
+		</ul>
+	</section>
+</main>

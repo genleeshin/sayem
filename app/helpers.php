@@ -26,12 +26,16 @@ function redirect($url=null){
     exit;
 }
 
-function sanitize_rich_text_input($input){
+function sanitize_richtext($input){
     $input = strip_tags($input, "<i>,<strong>,<p>,<b>");
 
     // encode all html and special chars
 
     return htmlentities($input);
+}
+
+function sanitize_string($string){
+    return filter_var(trim($string), FILTER_SANITIZE_STRING,FILTER_SANITIZE_SPECIAL_CHARS);
 }
 
 function form_value($key, $model=null){

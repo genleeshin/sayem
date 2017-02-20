@@ -321,9 +321,11 @@ class QueryBuilder{
 		$field = '';
 
 		foreach($data as $k=>$v):
-			$field = $k . '=:' . $k;
+			$field .= $k . '=:' . $k . ',';
 			$this->values[$k] = $v;
 		endforeach;
+
+		$field = rtrim($field, ',');
 
 		$query = "update $this->table set $field " . $this->getCondition();
 

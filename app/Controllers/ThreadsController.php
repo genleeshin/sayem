@@ -6,6 +6,8 @@ use App\Thread;
 
 use App\Database;
 
+use App\Topic;
+
 class ThreadsController extends Controller{
 
 	public function index()
@@ -32,11 +34,18 @@ class ThreadsController extends Controller{
 
 		$sort = get_string('sort', 'newest');
 
+		$topic = get_int('topic', false);
+
+		if($topic)
+			$query->where('topic_id', $topic);
+
 		Thread::setOrder($query, $sort);
 
 		$threads = $query->get();
 
-		return view('threads.index', compact('threads', 'sort'));
+		$topics = Topic::all();
+
+		return view('threads.index', compact('threads', 'sort', 'topics'));
 	
 	}
 
@@ -56,93 +65,55 @@ class ThreadsController extends Controller{
 	
 	}
 
-	// reply to a thread
-
-	public function reply()
-	{
-		// user must be logged in to post a reply
-		if(!is_logged())
-			forbidden();
-
-		$id = post_int('id', false);
-
-		if(!$id) die('Invalid post');
-
-		// check if reply is empty, must have atleast 2 characters
-
-		// if error redirect back to form
-
-		$this->validate([
-				'body' => 'text|min:2'
-			], '/threads?id=' . $id . '#form-reply');
-
-
-		// validation is OK
-
-		// remove all html tags from reply body, keep only p,b,i,strong
-
-		$body = sanitize_rich_text_input($_POST['body']);
-
-		// insert to db
-
-		$reply = Thread::create([
-				'parent_id' => $id,
-				'user_id' => user()->id,
-				'body' => $body
-			]);
-
-		// recount replies
-
-		(new Thread)->updateTotalReplies($id);
-
-		redirect('/threads?id=' . $id . '#reply-id' . $reply->id);
-	
-	}
-
 	// create new thread
 
 	public function add()
-	{
+	{	
 	
-		// user must be logged in
-		if(!is_logged())
-			forbidden();
-
-		// empty instance
-		$post = null;
-
-		return view('threads.form', compact('post'));
+		return $this->form('add');
 	
 	}
 
 	// edit post
 
 	public function edit()
+	{	
+
+		return $this->form('edit');
+	
+	}
+
+	public function form($type='add')
 	{
-		// user must be logged in to post a reply
+	
+		// user must be logged in
 		if(!is_logged())
 			forbidden();
 
-		$id = get_int('id', false);
+		if($type=='edit'){
 
-		if(!$id) die('Invalid post');
+			$id = get_int('id', false);
 
-		// get post details
+			if(!$id) die('Invalid post');
 
-		$post = Thread::find($id);
+			// get post details
 
-		// check if user own this post
+			$post = Thread::find($id);
 
-		if($post->user_id != user()->id)
-			die('You are not authrized to edit this post');
+			if($post->user_id != user()->id){
+				die('You are not authrized to edit this post');
+			}
 
-		// it's his own post so let him edit
+		}else{
 
-		// post a reply or main thread title
+			$post = null;
 
-		$is_main_post = $post->parent_id>0?false:true;
+		}
 
-		return view('threads.form', compact('post', 'is_main_post'));
+		$topics = Topic::all();
+
+		return view('threads.form', compact('post', 'topics', 'type'));
+
 	
 	}
 
@@ -151,26 +122,7 @@ class ThreadsController extends Controller{
 	public function create()
 	{
 
-		// user must be logged in
-
-		if(!is_logged())
-			forbidden();
-
-	
-		$valid = $this->validate([
-
-			'title' => 'text|min:2',
-
-			'body' => 'text|min:2'
-		], '/thread/new');
-
-		$data['title'] = filter_var(trim($_POST['title']), FILTER_SANITIZE_STRING,FILTER_SANITIZE_SPECIAL_CHARS);
-
-		$data['body'] = sanitize_rich_text_input($_POST['body']);
-
-		$data['user_id'] = user()->id;
-
-		$post = Thread::create($data);
+		$post = $this->store('create', '/thread/new');
 
 		redirect('/threads?id=' . $post->id);
 	}
@@ -179,47 +131,27 @@ class ThreadsController extends Controller{
 
 	public function save()
 	{
-	
-		// user must be logged in
-		if(!is_logged())
-			forbidden();
 
-		// check if post has a valid id
-
-		$id = post_int('id', false);
-
-		if(!$id) die('Invalid post');
-
-		// validate
-
-		$rules['body'] = 'text|min:2';
-
-		if($title = post_string('title', false))
-			$rules['title'] = 'text|min:2';
-
-		$valid = $this->validate($rules, '/thread/edit?id=' . $id);
-
-		// get post details
-
-		$post = Thread::find($id);
-
-		// check if user own this post
-
-		if($post->user_id != user()->id)
-			die('You are not authrized to edit this post');
-
-		if($title)
-			$data['title'];
-
-		$data['body'] = sanitize_rich_text_input($_POST['body']);
-
-		Thread::update($data, ['id' => $id]);
+		$post = $this->store('save', '/thread/edit?id=_id_');
 
 		if($post->parent_id>0){
 			redirect('/threads?id=' . $post->parent_id . '#reply' . $id);
 		}
 
-		redirect('/threads?id=' . $id);
+		redirect('/threads?id=' . $post->id);
+	
+	}
+
+// reply to a thread
+
+	public function reply()
+	{
+
+		$reply = $this->store('reply', '/threads?id=_id_#form-reply');
+
+		(new Thread)->updateTotalReplies($reply->parent_id);
+
+		redirect('/threads?id=' . $reply->parent_id . '#reply-id' . $reply->id);
 	
 	}
 
@@ -272,6 +204,65 @@ class ThreadsController extends Controller{
 			return redirect('/threads?id=' . $post->parent_id);
 
 		return redirect();
+	
+	}
+
+	public function store($type='create', $redirect_url='/')
+	{
+	
+		// user must be logged in
+
+		if(!is_logged())
+			forbidden();
+
+		if($type=='save' || $type=='reply'){
+
+			$id = post_int('id', false);
+
+			if(!$id) die('Invalid post');
+
+			$post = Thread::find($id);
+
+		}
+
+		$rules['body'] = 'text|min:2';
+
+		if($title = post_string('title', false))
+			$rules['title'] = 'text|min:2';
+
+		if($id)
+			$redirect_url = str_replace('_id_', $id, $redirect_url);
+
+		$valid = $this->validate($rules, $redirect_url);
+
+		if($title)
+			$data['title'] = sanitize_string($_POST['title']);
+
+		$data['body'] = sanitize_richtext($_POST['body']);
+
+		$data['topic_id'] = post_int('topic_id', null);
+
+		if($type=='save'){
+
+			Thread::update($data, ['id' => $id]);
+
+			return $post;
+
+		}elseif($type=='reply'){
+
+			$data['user_id'] = user()->id;
+
+			$data['parent_id'] = $id;
+
+			return Thread::create($data);
+
+
+		}else{
+
+			$data['user_id'] = user()->id;
+
+			return Thread::create($data);
+		}
 	
 	}
 
