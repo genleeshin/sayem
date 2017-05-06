@@ -12,11 +12,11 @@ return [
 
 		'port' => '3306',
 
-		'database' => 'sayem',
+		'database' => 'dbname',
 
 		'username' => 'root',
 
-		'password' => 'spboss2003',
+		'password' => 'password',
 
 		'charset' => 'utf8',
             
